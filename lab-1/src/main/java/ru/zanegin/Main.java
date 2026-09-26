@@ -19,7 +19,7 @@ public class Main {
         CsvCharacterWriter writer = new CsvCharacterWriter();
         writer.writeToCsv(outputFileName, characters);
         
-        System.out.println("✅ Основное задание выполнено: данные отсортированы и записаны в " + outputFileName);
+        System.out.println(" Основное задание выполнено: данные отсортированы и записаны в " + outputFileName);
 
         // --- ДОПОЛНИТЕЛЬНОЕ ЗАДАНИЕ (CRUD) ---
         String testDbFile = "crud_test_characters.csv";
@@ -42,22 +42,22 @@ public class Main {
         newCharacter.setLocationName("University");
         newCharacter.setCreated("2026-09-14T00:00:00.000Z");
         repository.save(newCharacter);
-        System.out.println("✅ CREATE: Добавлен новый персонаж с ID: " + newCharacter.getId());
+        System.out.println(" CREATE: Добавлен новый персонаж с ID: " + newCharacter.getId());
 
         // READ
         repository.findById(newCharacter.getId()).ifPresent(c -> 
-            System.out.println("✅ READ: Найден персонаж: " + c.getName() + ", статус: " + c.getStatus())
+            System.out.println(" READ: Найден персонаж: " + c.getName() + ", статус: " + c.getStatus())
         );
 
         // UPDATE
         newCharacter.setStatus("Dead");
         repository.update(newCharacter);
-        System.out.println("✅ UPDATE: Статус персонажа обновлен на: " + newCharacter.getStatus());
+        System.out.println(" UPDATE: Статус персонажа обновлен на: " + newCharacter.getStatus());
 
         // DELETE
         repository.deleteById(newCharacter.getId());
-        System.out.println("✅ DELETE: Персонаж с ID " + newCharacter.getId() + " удален.");
+        System.out.println(" DELETE: Персонаж с ID " + newCharacter.getId() + " удален.");
         
-        System.out.println("✅ Дополнительное задание (CRUD) успешно продемонстрировано.");
+        System.out.println(" Дополнительное задание (CRUD) успешно продемонстрировано.");
     }
 }

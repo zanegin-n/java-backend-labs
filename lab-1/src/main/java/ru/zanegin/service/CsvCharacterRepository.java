@@ -1,7 +1,9 @@
 package ru.zanegin.service;
 
 import ru.zanegin.model.RmCharacter;
+
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -25,10 +27,13 @@ public class CsvCharacterRepository implements CharacterRepository {
             return list;
         }
         try (BufferedReader br = Files.newBufferedReader(Paths.get(filePath), StandardCharsets.UTF_8)) {
-            String line = br.readLine(); // Пропускаем заголовок
-            while (line != null) {
-                list.add(parseLine(line));
-                line = br.readLine();
+            br.readLine();
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (!line.trim().isEmpty()) {
+                    list.add(parseLine(line));
+                }
             }
         } catch (IOException e) {
             System.err.println("Ошибка при чтении файла: " + e.getMessage());
@@ -98,13 +103,19 @@ public class CsvCharacterRepository implements CharacterRepository {
     }
 
     private void persistToFile() {
-        try (java.io.BufferedWriter bw = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) {
+        try (BufferedWriter bw = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) {
             bw.write("id,name,status,species,type,gender,origin/name,location/name,created\n");
             for (RmCharacter character : characters) {
                 bw.write(String.format("%d,%s,%s,%s,%s,%s,%s,%s,%s\n",
-                        character.getId(), character.getName(), character.getStatus(),
-                        character.getSpecies(), character.getType(), character.getGender(),
-                        character.getOriginName(), character.getLocationName(), character.getCreated()));
+                        character.getId(),
+                        character.getName(),
+                        character.getStatus(),
+                        character.getSpecies(),
+                        character.getType(),
+                        character.getGender(),
+                        character.getOriginName(),
+                        character.getLocationName(),
+                        character.getCreated()));
             }
         } catch (IOException e) {
             System.err.println("Ошибка при записи в файл: " + e.getMessage());

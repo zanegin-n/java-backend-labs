@@ -19,7 +19,7 @@ public class CsvCharacterReader {
         }
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8))) {
-            String line = br.readLine(); // Пропускаем заголовок
+            String line = br.readLine();
             while ((line = br.readLine()) != null) {
                 characters.add(parseLine(line));
             }
