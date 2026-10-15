@@ -1,16 +1,12 @@
-# IDE - IntelliJ IDEA
 .idea/
 *.iml
 
-# IDE - Eclipse
 .classpath
 .project
 .settings/
 
-# IDE - VS Code
 .vscode/
 
-# Maven
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -22,7 +18,6 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
-# Compiled Java files
 *.class
 *.log
 *.jar
@@ -30,15 +25,12 @@ buildNumber.properties
 *.ear
 *.nar
 
-# OS files
 .DS_Store
 Thumbs.db
 
-# Generated CSV files (кроме исходного characters.csv)
 sorted_characters.csv
 crud_test_characters.csv
 
-# Temporary files
 *.tmp
 *.bak
 *.swp
