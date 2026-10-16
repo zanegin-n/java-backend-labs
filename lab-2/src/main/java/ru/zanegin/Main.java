@@ -2,6 +2,7 @@ package ru.zanegin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.zanegin.config.DatabaseConfig;
 import ru.zanegin.model.Article;
 import ru.zanegin.repository.ArticleRepository;
 import ru.zanegin.repository.JdbcArticleRepository;
@@ -12,7 +13,8 @@ public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        ArticleRepository repository = new JdbcArticleRepository();
+        DatabaseConfig dbConfig = new DatabaseConfig();
+        ArticleRepository repository = new JdbcArticleRepository(dbConfig.getDataSource());
 
         log.info("=== CREATE ===");
         Article article1 = new Article(null, "Java Basics", 0);
@@ -24,16 +26,20 @@ public class Main {
         log.info("Created article with id: {}", id2);
 
         log.info("=== READ by ID ===");
-        Article found = repository.findById(id1);
-        log.info("Found: {}", found);
+        repository.findById(id1).ifPresentOrElse(
+                found -> log.info("Found: {}", found),
+                () -> log.warn("Article with id {} not found", id1)
+        );
 
         log.info("=== READ by Title ===");
-        Article foundByTitle = repository.findByTitle("Advanced Java");
-        log.info("Found by title: {}", foundByTitle);
+        repository.findByTitle("Advanced Java").ifPresentOrElse(
+                found -> log.info("Found by title: {}", found),
+                () -> log.warn("Article with title 'Advanced Java' not found")
+        );
 
         log.info("=== UPDATE ===");
-        found.setViews(150);
-        boolean updated = repository.update(found);
+        article1.setViews(150);
+        boolean updated = repository.update(article1);
         log.info("Updated: {}", updated);
 
         log.info("=== FIND ALL ===");
