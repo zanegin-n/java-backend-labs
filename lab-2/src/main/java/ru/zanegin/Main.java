@@ -13,12 +13,12 @@ public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        DatabaseConfig dbConfig = new DatabaseConfig();
-        ArticleRepository repository = new JdbcArticleRepository(dbConfig.getDataSource());
+        DatabaseConfig dbConfig = new DatabaseConfig(); // 2. запускаем функцию-конструктор(создается и настраивается пул соединений)
+        ArticleRepository repository = new JdbcArticleRepository(dbConfig.getDataSource()); // 1. запускаем констурктор репозиторий(тут собраны основные функции для CRUD), внутри вызываем createTableIfNotExists()
 
         log.info("=== CREATE ===");
         Article article1 = new Article(null, "Java Basics", 0);
-        int id1 = repository.save(article1);
+        int id1 = repository.save(article1); // 3.1 получает ID
         log.info("Created article with id: {}", id1);
 
         Article article2 = new Article(null, "Advanced Java", 0);
@@ -26,7 +26,7 @@ public class Main {
         log.info("Created article with id: {}", id2);
 
         log.info("=== READ by ID ===");
-        repository.findById(id1).ifPresentOrElse(
+        repository.findById(id1).ifPresentOrElse( // 3.2 безопасно работает с Optional. Функция ifPresentOrElse принимает две лямбда-функции: первую выполнить, если значение есть, вторую - если пусто
                 found -> log.info("Found: {}", found),
                 () -> log.warn("Article with id {} not found", id1)
         );
@@ -39,19 +39,19 @@ public class Main {
 
         log.info("=== UPDATE ===");
         article1.setViews(150);
-        boolean updated = repository.update(article1);
+        boolean updated = repository.update(article1); // 3.3 проверяет булевый результат
         log.info("Updated: {}", updated);
 
         log.info("=== FIND ALL ===");
-        List<Article> all = repository.findAll();
+        List<Article> all = repository.findAll(); // показывает полный список статей
         log.info("All articles: {}", all);
 
         log.info("=== DELETE ===");
-        repository.deleteById(id1);
+        repository.deleteById(id1); // 3.4 удаляет запись
         log.info("Deleted article with id: {}", id1);
 
         log.info("=== FINAL STATE ===");
-        List<Article> remaining = repository.findAll();
+        List<Article> remaining = repository.findAll(); // показывает после удаления, что данная статься удалена
         log.info("Remaining articles: {}", remaining);
     }
 }

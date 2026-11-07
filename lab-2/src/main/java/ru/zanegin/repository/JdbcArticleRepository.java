@@ -21,7 +21,7 @@ public class JdbcArticleRepository implements ArticleRepository {
     }
 
     @Override
-    public void createTableIfNotExists() {
+    public void createTableIfNotExists() { // создаем таблицу
         String sql = """
             CREATE TABLE IF NOT EXISTS lab2_schema.article (
                 id SERIAL PRIMARY KEY,
@@ -40,16 +40,16 @@ public class JdbcArticleRepository implements ArticleRepository {
     }
 
     @Override
-    public int save(Article article) {
+    public int save(Article article) { // функция сохранения
         String sql = "INSERT INTO lab2_schema.article (title, views) VALUES (?, ?) RETURNING id";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, article.getTitle());
             ps.setInt(2, article.getViews());
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    int id = rs.getInt("id");
-                    article.setId(id);
+                if (rs.next()) {  // переходим на первую и единственную строку результата
+                    int id = rs.getInt("id"); // читаем колонку "id"
+                    article.setId(id); // устанавливаем ID в объект статьи
                     log.info("Saved article with id: {}", id);
                     return id;
                 }
@@ -62,13 +62,14 @@ public class JdbcArticleRepository implements ArticleRepository {
     }
 
     @Override
-    public Optional<Article> findById(int id) {
+    public Optional<Article> findById(int id) { // функция поиска
         String sql = "SELECT id, title, views FROM lab2_schema.article WHERE id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
+            ps.setInt(1, id); // Подставляем ID в запрос
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+                if (rs.next()) { // Если есть результат
+                    // Кладем найденную статью в Optional
                     return Optional.of(new Article(rs.getInt("id"), rs.getString("title"), rs.getInt("views")));
                 }
             }
@@ -80,11 +81,11 @@ public class JdbcArticleRepository implements ArticleRepository {
     }
 
     @Override
-    public Optional<Article> findByTitle(String title) {
+    public Optional<Article> findByTitle(String title) { // также функция поиска
         String sql = "SELECT id, title, views FROM lab2_schema.article WHERE title = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, title);
+            ps.setString(1, title); // Подставляем название
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return Optional.of(new Article(rs.getInt("id"), rs.getString("title"), rs.getInt("views")));
@@ -99,14 +100,14 @@ public class JdbcArticleRepository implements ArticleRepository {
 
     @Override
     public List<Article> findAll() {
-        List<Article> articles = new ArrayList<>();
+        List<Article> articles = new ArrayList<>(); // Создаем пустой список
         String sql = "SELECT id, title, views FROM lab2_schema.article";
         try (Connection conn = dataSource.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
+            while (rs.next()) { // Пока есть строки в результате
                 articles.add(new Article(rs.getInt("id"), rs.getString("title"), rs.getInt("views")));
-            }
+            } // Добавляем каждую статью в список
         } catch (SQLException e) {
             log.error("Failed to find all articles", e);
             throw new DatabaseException("Ошибка при получении списка статей", e);
@@ -115,7 +116,7 @@ public class JdbcArticleRepository implements ArticleRepository {
     }
 
     @Override
-    public boolean update(Article article) {
+    public boolean update(Article article) { // функция обновления
         String sql = "UPDATE lab2_schema.article SET title = ?, views = ? WHERE id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -123,7 +124,8 @@ public class JdbcArticleRepository implements ArticleRepository {
             ps.setInt(2, article.getViews());
             ps.setInt(3, article.getId());
             int rows = ps.executeUpdate();
-            if (rows > 0) {
+            // executeUpdate() для INSERT/UPDATE/DELETE. Возвращает количество затронутых строк
+            if (rows > 0) { // Если хотя бы одна строка обновлена
                 log.info("Updated article with id: {}", article.getId());
                 return true;
             }
@@ -131,11 +133,11 @@ public class JdbcArticleRepository implements ArticleRepository {
             log.error("Failed to update article: {}", article.getId(), e);
             throw new DatabaseException("Ошибка при обновлении статьи", e);
         }
-        return false;
+        return false; // Ни одна строка не обновлена — статья с таким ID не существует
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(int id) { // фукнция удаления
         String sql = "DELETE FROM lab2_schema.article WHERE id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -144,7 +146,7 @@ public class JdbcArticleRepository implements ArticleRepository {
             if (rows > 0) {
                 log.info("Deleted article with id: {}", id);
             } else {
-                log.warn("Article with id {} not found for deletion", id);
+                log.warn("Article with id {} not found for deletion", id); // warn — предупреждение, не ошибка. Удаление несуществующей записи — нормально
             }
         } catch (SQLException e) {
             log.error("Failed to delete article: {}", id, e);

@@ -1,3 +1,4 @@
+// описываем одного персонажа
 package ru.zanegin.model;
 
 import java.util.Objects;
@@ -13,8 +14,8 @@ public class RmCharacter {
     private String locationName;
     private String created;
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() { return id; } // метод для чтения значения поля
+    public void setId(int id) { this.id = id; } // метод для изменения значения поля 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getStatus() { return status; }
@@ -42,6 +43,6 @@ public class RmCharacter {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id); // превращает id персонажа в специальное число(хеш-код)
     }
 }

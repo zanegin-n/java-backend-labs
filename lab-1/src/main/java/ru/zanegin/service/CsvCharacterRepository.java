@@ -1,3 +1,4 @@
+// клас который работает с файлом как с базой данных
 package ru.zanegin.service;
 
 import ru.zanegin.model.RmCharacter;
@@ -64,7 +65,7 @@ public class CsvCharacterRepository implements CharacterRepository {
 
     @Override
     public Optional<RmCharacter> findById(int id) {
-        return characters.stream().filter(c -> c.getId() == id).findFirst();
+        return characters.stream().filter(c -> c.getId() == id).findFirst(); 
     }
 
     @Override
@@ -102,7 +103,7 @@ public class CsvCharacterRepository implements CharacterRepository {
         persistToFile();
     }
 
-    private void persistToFile() {
+    private void persistToFile() { // перезаписываем целиком что получили
         try (BufferedWriter bw = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) {
             bw.write("id,name,status,species,type,gender,origin/name,location/name,created\n");
             for (RmCharacter character : characters) {

@@ -1,3 +1,4 @@
+// отвечает за парсинг csv в vector
 package ru.zanegin.service;
 
 import ru.zanegin.model.RmCharacter;
@@ -10,16 +11,16 @@ import java.util.Vector;
 
 public class CsvCharacterReader {
 
-    public Vector<RmCharacter> readFromResource(String fileName) {
+    public Vector<RmCharacter> readFromResource(String fileName) { 
         Vector<RmCharacter> characters = new Vector<>();
         InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(fileName);
         
         if (resourceAsStream == null) {
             throw new RuntimeException("Файл не найден в ресурсах: " + fileName);
-        }
+        } 
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8))) {
-            String line = br.readLine();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8))) { // bufferedreader - 
+            String line = br.readLine(); // читаем 1 строку и пропускаем ее
             while ((line = br.readLine()) != null) {
                 characters.add(parseLine(line));
             }
@@ -31,9 +32,9 @@ public class CsvCharacterReader {
     }
 
     private RmCharacter parseLine(String line) {
-        String[] parts = line.split(",", -1);
-        RmCharacter character = new RmCharacter();
-        character.setId(Integer.parseInt(parts[0].trim()));
+        String[] parts = line.split(",", -1); // срезаем пустые поля
+        RmCharacter character = new RmCharacter(); 
+        character.setId(Integer.parseInt(parts[0].trim())); // преобразование строк в число
         character.setName(parts[1].trim());
         character.setStatus(parts[2].trim());
         character.setSpecies(parts[3].trim());

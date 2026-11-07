@@ -1,3 +1,4 @@
+// сохраняет отсортированный вектор обратно в csv
 package ru.zanegin.service;
 
 import ru.zanegin.model.RmCharacter;
@@ -11,7 +12,7 @@ import java.util.Vector;
 public class CsvCharacterWriter {
 
     public void writeToCsv(String filePath, Vector<RmCharacter> characters) {
-        try (BufferedWriter bw = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) {
+        try (BufferedWriter bw = Files.newBufferedWriter(Paths.get(filePath), StandardCharsets.UTF_8)) { // файл закроется если даже возникнет ошибка
             bw.write("id,name,status,species,type,gender,origin/name,location/name,created\n");
             for (RmCharacter character : characters) {
                 bw.write(String.format("%d,%s,%s,%s,%s,%s,%s,%s,%s\n",

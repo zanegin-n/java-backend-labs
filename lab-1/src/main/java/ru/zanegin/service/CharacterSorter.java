@@ -1,3 +1,4 @@
+// сортирует vector по статусу 
 package ru.zanegin.service;
 
 import ru.zanegin.model.RmCharacter;
@@ -12,7 +13,7 @@ public class CharacterSorter {
         Collections.sort(characters, statusComparator);
     }
 
-    private int getStatusPriority(String status) {
+    private int getStatusPriority(String status) { // присваивание индексов и сверху функция определяет уже не по строкам а по индексам которые сделаны в данной функции
         if (status == null) {
             return 4;
         }

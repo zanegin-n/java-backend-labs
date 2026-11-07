@@ -6,11 +6,12 @@ import java.util.Vector;
 
 public class Main {
     public static void main(String[] args) {
-        // --- ОСНОВНОЕ ЗАДАНИЕ ---
+        // ОСНОВНОЕ ЗАДАНИЕ 
         String inputFileName = "characters.csv";
         String outputFileName = "sorted_characters.csv";
 
-        CsvCharacterReader reader = new CsvCharacterReader();
+        // обьект - метод
+        CsvCharacterReader reader = new CsvCharacterReader(); 
         Vector<RmCharacter> characters = reader.readFromResource(inputFileName);
 
         CharacterSorter sorter = new CharacterSorter();
@@ -21,7 +22,7 @@ public class Main {
         
         System.out.println(" Основное задание выполнено: данные отсортированы и записаны в " + outputFileName);
 
-        // --- ДОПОЛНИТЕЛЬНОЕ ЗАДАНИЕ (CRUD) ---
+        // ДОПОЛНИТЕЛЬНОЕ ЗАДАНИЕ (CRUD) 
         String testDbFile = "crud_test_characters.csv";
         
         // 1. Инициализируем тестовый файл данными из ресурса
